@@ -1,0 +1,3 @@
+params.run_dir = "/sc1/raw/illumina/nextseq/200313_NB551443_0103_AH3TJ5AFX2"
+params.sample_sheet = "/sc1/groups/pls-redbfx/immunoPETE/develop/Daedalus/data/iPETEV2_Expt56_LibPool11_NexSeq_Run7_031320_MANIFEST.csv"
+params.runBcl2Fastq = true

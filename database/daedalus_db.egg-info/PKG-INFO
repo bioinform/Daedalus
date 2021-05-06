@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: daedalus-db
+Version: 0.0.1
+Summary: A database to store sequencing run information
+Home-page: http://ghe-rss.roche.com/plsRED-Bioinformatics/Daedalus
+Author: Richard Dannebaum
+Author-email: richard.dannebaum@roche.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN

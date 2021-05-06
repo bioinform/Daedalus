@@ -1,0 +1,42 @@
+[Header],,,,,,,,
+IEMFileVersion,4,,,,,,,
+Investigator Name,Dilduz Telman,,,,,,,
+Experiment Name,iPETE_V2_Exp56_LibPool11_NextSeq_Run7_031320,,,,,,,
+Date,3/13/2020,,,,,,,
+Workflow,GenerateFASTQ,,,,,,,
+Application,FASTQ Only,,,,,,,
+Instrument Type,NextSeq,,,,,,,
+Assay,,,,,,,,
+Index Adapters,,,,,,,,
+Description,,,,,,,,
+Chemistry,amplicon,,,,,,,
+,,,,,,,,
+[Reads],,,,,,,,
+151,,,,,,,,
+151,,,,,,,,
+,,,,,,,,
+[Settings],,,,,,,,
+ReverseComplement,0,,,,,,,
+Adapter,,,,,,,,
+AdapterRead2,,,,,,,,
+,,,,,,,,
+[Data],,,,,,,,
+Sample_ID,Sample_Name,Sample_Plate,Sample_Well,Index_Plate_Well,I7_Index_ID,index,I5_Index_ID,index2
+Lib1_Exp56_Strp1_1,PBB_IGH_1_10x_20x_LibAmp3,,,,i7_sg1,TGGATCGA,i5_sg1,AGCTAGGT
+Lib2_Exp56_Strp1_2,PBB_IGH_2_10x_20x_LibAmp3,,,,i7_sg2,CAAGCTAG,i5_sg2,GATCGAAC
+Lib3_Exp56_Strp1_3,PBB_IGH_3_10x_20x_LibAmp3,,,,i7_sg3,GTACCAAG,i5_sg3,GAACCATG
+Lib4_Exp56_Strp1_4,PBB_IGH_4_10x_20x_LibAmp3,,,,i7_sg4,ACGTTGGA,i5_sg4,AGGTTGCA
+Lib5_Exp56_Strp1_5,PanT_TRB_1_10x_20x_LibAmp3,,,,i7_sg5,TCGTGGTA,i5_sg5,ATGGTGCT
+Lib6_Exp56_Strp1_6,PanT_TRB_2_10x_20x_LibAmp3,,,,i7_sg6,CTACAACG,i5_sg6,GCAACATC
+Lib7_Exp56_Strp1_7,PanT_TRB_3_10x_20x_LibAmp3,,,,i7_sg7,GTTCAAGG,i5_sg7,GGAACTTG
+Lib8_Exp56_Strp1_8,PanT_TRB_4_10x_20x_LibAmp3,,,,i7_sg8,ACCTGGAA,i5_sg8,AAGGTCCA
+Lib9_Exp56_Strp2_1,Hut78_TRB_1_10x_20x_LibAmp3,,,,i7_sg9,TCTTAGCG,i5_sg9,GCGATTCT
+Lib11_Exp56_Strp3_1,PBB_IGH_1_6x_24x_LibAmp4,,,,i7_sg13,TCTACAGG,i5_sg13,GGACATCT
+Lib12_Exp56_Strp3_2,PBB_IGH_2_6X_24X_LibAmp4,,,,i7_sg14,CTCGTGAA,i5_sg14,AAGTGCTC
+Lib13_Exp56_Strp3_3,PBB_IGH_3_6X_24X_LibAmp4,,,,i7_sg15,GTTCGGAT,i5_sg15,TAGGCTTG
+Lib14_Exp56_Strp3_4,PBB_IGH_4_6X_24X_LibAmp4,,,,i7_sg16,ACCTAAGC,i5_sg16,CGAATCCA
+Lib15_Exp56_Strp3_5,PanT_TRB_1_6X_24X_LibAmp4,,,,i7_sg17,GTTGACTG,i5_sg17,GTCAGTTG
+Lib17_Exp56_Strp3_7,PanT_TRB_3_6X_24X_LibAmp4,,,,i7_sg19,TACCGGAA,i5_sg19,AAGGCCAT
+Lib18_Exp56_Strp3_8,PanT_TRB_4_6X_24X_LibAmp4,,,,i7_sg20,CGTTAAGG,i5_sg20,GGAATTGC
+Lib19_Exp56_Strp4_1,Hut78_TRB_1_6X_24X_LibAmp4,,,,i7_sg21,GCTATGTC,i5_sg21,CTGTATCG
+Lib20_Exp56_Strp4_2,Hut78_TRB_2_6X_24X_LibAmp4,,,,i7_sg22,ATCGCACT,i5_sg22,TCACGCTA

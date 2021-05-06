@@ -1,0 +1,1 @@
+params.analysis_dir="/sc1/groups/pls-redbfx/collaborations/sjpharma/KCL_COVID19_analysis/2020-04-27-iPETEV2_Expt6-8_LibPool1_NexSeq_Run1_test2"

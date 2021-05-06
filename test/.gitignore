@@ -1,0 +1,6 @@
+analysis
+work
+pipeline*
+.nextflow*
+testoutput
+*.log
