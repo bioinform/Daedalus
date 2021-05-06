@@ -25,7 +25,7 @@ git checkout tags/${release-version}
 ```
 
 ## Install SWIFR aligner
-Full README for [swifr](packages/swifr/README.md) and how to install.
+Full README for ![swifr](packages/swifr/README.md) and how to install.
 
 
 ## Build Conda Environment
