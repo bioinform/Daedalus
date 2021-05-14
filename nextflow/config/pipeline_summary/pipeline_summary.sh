@@ -1,5 +1,5 @@
 #!/bin/bash
-source activate Daedalus
+source activate Daedalus_env
 
 ##pipeline-summary -p ${analysis_dir}
 

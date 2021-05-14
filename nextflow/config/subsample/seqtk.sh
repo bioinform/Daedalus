@@ -1,5 +1,7 @@
 #!/bin/bash
 # Default params.subsample should be set to 1 so seqtk won't do subsampling.
+source activate Daedalus_env
+
 if [ ${params.subsample} == 1 ] 
 then
     gunzip -c $read1 > read1.fastq

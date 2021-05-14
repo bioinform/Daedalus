@@ -1,5 +1,5 @@
 #!/bin/bash
-source activate Daedalus
+source activate Daedalus_env
 
 ##run dedup with variable number of UMIs 
 if [ "${umi_mode}" ==  "none" ]

@@ -1,4 +1,5 @@
 #!/bin/bash -e
+source activate Daedalus_env
 bcl2fastq \
     --no-lane-splitting \
     -r ${task.cpus} \

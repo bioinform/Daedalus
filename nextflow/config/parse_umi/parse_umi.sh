@@ -1,5 +1,5 @@
 #!/bin/bash
-source activate Daedalus
+source activate Daedalus_env
 
 if [ -z "${umi_r1}" ]
 then

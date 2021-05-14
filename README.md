@@ -1,6 +1,6 @@
 # Daedalus
 
-Nextflow pipeline for analysis of libraries prepared using the Immuno-PETE assay.
+Nextflow pipeline for analysis of libraries prepared using the ImmunoPETE assay.
 
 - [Daedalus](#daedalus)
     - [Download](#download)
@@ -14,14 +14,22 @@ Nextflow pipeline for analysis of libraries prepared using the Immuno-PETE assay
     - [Workflow](#workflow)
     - [Methods](#methods)
 
-## Download
+Note... The Nextflow Config file must be configured for the queue.
 
+## Software Requirements 
+- built on a linux server: CentOS Linux release 7.7.1908 (Core)
+- miniconda3, for package management
+- nextflow 19.07.0, to run the pipeline 
+- uge, for cluster job submission
+
+## Install SWIFR aligner
+A smith waterman alignment implemention (c++) was developed and is used to identfy primers and V/J gene segements
+Full README for ![swifr](packages/swifr/README.md) and how to install.
+
+## Download git rep
 ```bash
 git clone git@github.com:bioinform/Daedalus.git
-
 cd Daedalus
-
-git checkout tags/${release-version}
 ```
 
 ## Install SWIFR aligner
@@ -31,21 +39,23 @@ Full README for ![swifr](packages/swifr/README.md) and how to install.
 ## Build Conda Environment
 
 Build the conda environment for running the pipeline:
-
 ```bash
-module load miniconda3
-
 conda env create -f environment.yml
 ```
 
-##install python packages
+##install python packages in the loaded conda ENV
+must be performed within the cloned directory
+
 ```bash
 conda activate Daedalus
-./install.sh
-
+./install_packages.sh
 ```
 
-## Test Pipeline
+## Nextflow configuration
+Nextflow must be configured for each systm. The ipete profile in the nextflow config file `./nextflow/nextflow.config` should be updated accordingly.
+
+
+## Test Pipeline on a single sample
 
 ```bash
 module load bats
@@ -54,18 +64,17 @@ cd test
 bats single-sample-ipete.bats
 ```
 
-## Run Pipeline
+## Running Pipeline
 
 ### Load the Environment
 
-Activate the conda environment and nextflow module 
+Activate the conda environment and be sure nextflow is loaded  
 
 ```bash
 conda activate Daedalus
-module load nextflow_latest/19.07.0
 ```
 
-### Generate Manifest from Sample Sheet
+### Generate Manifest for ImmunoPETE Run from the Sample Sheet
 
 ```bash
 manifestGenerator = /path/to/Daedalus/pipeline_runner/manifest_generator.py

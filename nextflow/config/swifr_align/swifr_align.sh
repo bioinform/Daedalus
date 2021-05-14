@@ -1,4 +1,6 @@
 #!/bin/bash
+source activate Daedalus_env
+
 module load samtools
 ${params.swifr} -v -f $reads -q $reference -k $kmerSize -m 5 -s $alnScore -p ${task.cpus} -F $kmerFraction -o ${outname}
 samtools view -Sb ${outname}.sam > ${outname}.bam
