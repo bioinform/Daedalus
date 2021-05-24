@@ -1,5 +1,5 @@
-##download packages.tar.gz
-##tar -xvfz packages.tar.gz
+##first download packages.tar.gz
+##then 'tar -xvfz packages.tar.gz'
 cd ./packages/fastq-streamer && python setup.py install && cd ../../
 cd ./packages/bam-streamer && python setup.py install && cd ../../
 cd ./packages/trim-primers && python setup.py install && cd ../../ 
