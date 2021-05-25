@@ -1,4 +1,4 @@
-## V-D-J recombinant detection
+## V-J segment detection
 V and J gene segments are aligned against Reads using [swifr](http://ghe-rss.roche.com/plsRED-Bioinformatics/swifr). 
 SWIFR (Smith Waterman Implementation for Fast Read identification) utilizes a `kmer similarity index` and the `Smith Waterman` alignment algorithm to identify gene segements within reads.
 
