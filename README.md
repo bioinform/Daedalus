@@ -28,13 +28,12 @@ git clone git@github.com:bioinform/Daedalus.git
 cd Daedalus
 ```
 
-##Packages
-- download packages.tar.gz
+## Packages
+- download packages.tar.gz from dropbox, move the packages folder into the Daedalus repo folder.
 
 ```bash
-wget packages.tar.gz
 tar -xvfz packages.tar.gz
-
+mv packages ./Daedalus
 ```
 
 ## Install SWIFR aligner
@@ -59,18 +58,25 @@ Nextflow must be configured for each system. The ipete profile in the nextflow c
 
 
 ## Test Pipeline on a single sample
-Once all the software has been installed, and nextflow has been configured, run the bats test. The bats test runs the pipeline on a single sample, from the paired fastq files in dropbox (download from dropbox and add both files to the data folder).
+Once all the software has been installed and nextflow has been configured the pipeline bats test can be run. The bats test runs the pipeline on a single sample, from the paired fastq files provided:
+- PBMC_1000ng_25ul_2_S6_R1_001.fastq.gz
+- PBMC_1000ng_25ul_2_S6_R2_001.fastq.gz
+
+In order the run the test, download both files from dropbox and move them into the data folder `Daedalus/data`. Once the data is available, run the test using the following commands:
+
 ```bash
 conda activate Daedalus_env
 cd test
 bats single-sample-ipete.bats
 ```
 
+An example of the pipeline output has also been provided: `PBMC_1000ng_25ul_2.tar.gz`
+
+
 ## Running Pipeline
+Running the pipeline requires a complete flowcell worth of immunoPETE libraries.
 
 ### Load the Environment
-
-Always activate the conda environment
 
 ```bash
 conda activate Daedalus_env
