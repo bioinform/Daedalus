@@ -1,4 +1,4 @@
-name: Daedalus_env
+name: Daedalus
 channels:
   - bioconda/label/cf201901
   - https://repo.continuum.io/pkgs/free
