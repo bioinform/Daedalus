@@ -28,14 +28,6 @@ git clone git@github.com:bioinform/Daedalus.git
 cd Daedalus
 ```
 
-## Packages
-- download packages.tar.gz from dropbox, move the packages folder into the Daedalus repo folder.
-
-```bash
-tar -xvfz packages.tar.gz
-mv packages ./Daedalus
-```
-
 ## Install SWIFR aligner
 A smith waterman alignment implemention (c++) was developed and is used to identfy primers and V/J gene segements from fastq formatted reads. Please read the full README for swifr in the packages folder `./packages/swifr/` for instructions how to install.
 

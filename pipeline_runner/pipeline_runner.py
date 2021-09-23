@@ -52,7 +52,7 @@ class PipelineRunner:
     pipeline_reporter_path : str
         Path to the pipeline_summary.py.
     group : str
-        Group to submit jobs on SC1.
+        Group to submit jobs on the cluster.
     genes : set
         Genes to detect: {'TRA', 'TRB', 'TRD', 'TRG', 'IGH', 'IGL', 'IGK'}.
     idb_type : set
@@ -379,7 +379,7 @@ def parse_args():
     parser.add_argument('-r', '--resume', action='store_true',
                         help='When Nextflow work directory exists, resume the pipeline.')
     parser.add_argument('-g', '--group', default='rssprbf',
-                        help='Group to submit jobs on SC1.')
+                        help='Group to submit jobs on cluster.')
     parser.add_argument('--gene_type', type=str, default='ALL',
                         help='Gene type to detect: IG, TR, ALL. Default is ALL.')
     parser.add_argument('--idb_type', type=str,
@@ -388,7 +388,7 @@ def parse_args():
                         help='Run pipeline locally.')
     parser.add_argument('--wait', action='store_true',
                         help='Wait for the pipeline to finish. Without this option, nextflow will run in background.')
-    parser.add_argument('-o', '--out_dir', default='/sc1/groups/pls-redbfx/pipeline_runs/iPETE',
+    parser.add_argument('-o', '--out_dir', default='./daedalus_results',
                         help='Nextflow output directory.')
     parser.add_argument('--prefix',
                         help='Prefix project name with specified prefix. If None, the current date will be used.')
