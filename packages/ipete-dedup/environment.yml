@@ -1,0 +1,13 @@
+name: immunoPETE
+channels:
+    - bioconda
+dependencies:
+    - python=3.6
+    - pandas
+    - pysam
+    - presto
+    - conda-forge::python-levenshtein  
+    - pip:
+        - yattag
+        - git+http://ghe-rss.roche.com/plsRED-Bioinformatics/cdr3umi_db.git@b60aed9
+        - git+http://ghe-rss.roche.com/plsRED-Bioinformatics/SeqNetworks.git@7022509
