@@ -1,0 +1,39 @@
+[submodule "packages/fastq-streamer"]
+	path = packages/fastq-streamer
+	url = https://ghe-rss.roche.com/pls-red-packages/fastq-streamer.git
+[submodule "packages/VDJ-recombinant-detection"]
+	path = packages/VDJ-recombinant-detection
+	url = https://ghe-rss.roche.com/pls-red-packages/VDJ-recombinant-detection.git
+[submodule "packages/ipete-dedup"]
+	path = packages/ipete-dedup
+	url = https://ghe-rss.roche.com/pls-red-packages/ipete-dedup.git
+[submodule "packages/ipete-reporter"]
+	path = packages/ipete-reporter
+	url = https://ghe-rss.roche.com/pls-red-packages/ipete-reporter.git
+[submodule "packages/ipete-metrics"]
+	path = packages/ipete-metrics
+	url = https://ghe-rss.roche.com/pls-red-packages/ipete-metrics.git
+[submodule "packages/spikein-split"]
+	path = packages/spikein-split
+	url = https://ghe-rss.roche.com/pls-red-packages/spikein-split.git
+[submodule "packages/SeqNetworks"]
+	path = packages/SeqNetworks
+	url = https://ghe-rss.roche.com/pls-red-packages/SeqNetworks.git
+[submodule "packages/extract-umi"]
+	path = packages/extract-umi
+	url = https://ghe-rss.roche.com/pls-red-packages/extract-umi.git
+[submodule "packages/parse-umi"]
+	path = packages/parse-umi
+	url = https://ghe-rss.roche.com/pls-red-packages/parse-umi.git
+[submodule "packages/ipete-spikein-parser"]
+	path = packages/ipete-spikein-parser
+	url = https://ghe-rss.roche.com/pls-red-packages/ipete-spikein-parser.git
+[submodule "packages/bam-streamer"]
+	path = packages/bam-streamer
+	url = https://ghe-rss.roche.com/pls-red-packages/bam-streamer.git
+[submodule "packages/trim-primers"]
+	path = packages/trim-primers
+	url = https://ghe-rss.roche.com/pls-red-packages/trim-primers.git
+[submodule "packages/swifr"]
+	path = packages/swifr
+	url = https://ghe-rss.roche.com/plsRED-Bioinformatics/swifr.git
