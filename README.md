@@ -29,6 +29,7 @@ Note... The Nextflow Config file must be configured for the queue.
 - Java 8
 - Nextflow 19.07.0, to run the pipeline
 - UGE, for cluster job submission
+- bats 0.4.0, for testing
 
 ### Download git repo
 
@@ -81,7 +82,7 @@ The pipeline runs on UGE cluster by default. If you install it on a different ma
 ipete_docker {
     process.clusterOptions = { "-l h_vmem=${task.ext.vmem} -S /bin/bash -l docker_version=new -V" }
 }
-docker.runOptions = "-u=\$UID --rm -v /path/to/input_and_output:/path/to/input_and_output"
+docker.runOptions = "-u=\$UID --rm -v /path/to/input_and_output:/path/to/input_and_output  -v /path/to/daedalus_repo:/path/to/daedalus_repo"
 ```
 
 ### Test Pipeline on a single sample
