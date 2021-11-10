@@ -76,8 +76,11 @@ params.bcl2fastq_docker = "{dockerhub_username}/bcl2fastq:{version}"
 
 ### Configure the pipeline
 
-The pipeline runs on Roche SC1 computing cluster (UGE) by default. If you install it on a different machine, modify the cluster settings in the `nextflow/nextflow.config` accordingly.
-Please refer to Nextflow's documentation for more details: [SGE/UGE](https://www.nextflow.io/docs/latest/process.html#process-clusteroptions), [Docker](https://www.nextflow.io/docs/latest/config.html#config-docker).
+The pipeline runs on Roche SC1 computing cluster (UGE) by default. If you install it on a different machine,
+modify the cluster settings in the `nextflow/nextflow.config` accordingly.
+Please refer to Nextflow's documentation for more details:
+[SGE/UGE](https://www.nextflow.io/docs/latest/process.html#process-clusteroptions),
+[Docker](https://www.nextflow.io/docs/latest/config.html#config-docker).
 
 ```javascript
 ipete_docker {
@@ -87,18 +90,19 @@ docker.runOptions = "-u=\$UID --rm -v /path/to/input_and_output:/path/to/input_a
 ```
 
 ### Test Pipeline on a single sample
-Once all the software has been installed and nextflow has been configured the pipeline bats test can be run. The bats test runs the pipeline on a single sample, from the paired fastq files provided:
-- PBMC_1000ng_25ul_2_S6_R1_001.fastq.gz
-- PBMC_1000ng_25ul_2_S6_R2_001.fastq.gz
 
-In order the run the test, download both files from dropbox and move them into the data folder `Daedalus/data`. Once the data is available, run the test using the following commands:
+Once all the software has been installed and nextflow has been configured the pipeline bats test can be run.
+The bats test runs the pipeline on a single sample, from the paired fastq files provided:
+
+- `data/PBMC_1000ng_25ul_2_S6_R1_001.fastq.gz`
+- `data/PBMC_1000ng_25ul_2_S6_R2_001.fastq.gz`
+
+Run the test using the following commands:
 
 ```bash
 cd test
 bats single-sample-ipete.bats
 ```
-
-An example of the pipeline output has also been provided: `PBMC_1000ng_25ul_2.tar.gz`
 
 ## Running Pipeline
 
@@ -122,7 +126,9 @@ python ${manifestGenerator} \
        ${sampleSheet}
 ```
 
-The manifest file contains all parameters needed for the pipeline to run. Sample specific tuning of parameters or any updates to the parameters can be acheived by editing the manifest file generated. After edits are complete, the pipeline can be submitted using the manifest file alone.
+The manifest file contains all parameters needed for the pipeline to run.
+Sample specific tuning of parameters or any updates to the parameters can be achieved by editing the manifest file generated.
+After edits are complete, the pipeline can be submitted using the manifest file alone.
 
 ### Submit Pipeline Run
 
