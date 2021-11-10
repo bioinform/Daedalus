@@ -76,7 +76,8 @@ params.bcl2fastq_docker = "{dockerhub_username}/bcl2fastq:{version}"
 
 ### Configure the pipeline
 
-The pipeline runs on UGE cluster by default. If you install it on a different machine, modify the cluster settings in the `nextflow/nextflow.config` accordingly.
+The pipeline runs on Roche SC1 computing cluster (UGE) by default. If you install it on a different machine, modify the cluster settings in the `nextflow/nextflow.config` accordingly.
+Please refer to Nextflow's documentation for more details: [SGE/UGE](https://www.nextflow.io/docs/latest/process.html#process-clusteroptions), [Docker](https://www.nextflow.io/docs/latest/config.html#config-docker).
 
 ```javascript
 ipete_docker {
@@ -131,10 +132,8 @@ Using the output from Manifest Generator `Daedalus_example_manifest.csv` pipelin
 pipelineRunner=/path/to/Daedalus/pipeline_runner/pipeline_runner.py
 outDir=/path/to/analysis/output
 
-python ${pipelineRunner} -g rssprbfprj --wait --resume -o ${outDir} Daedalus_example_manifest.csv
+python ${pipelineRunner} --no_fairshare --wait --resume -o ${outDir} Daedalus_example_manifest.csv
 ```
-
-A `-g $group` needs to be provided to submit jobs to SGE cluster on SC1. 
 
 ### Output
 
