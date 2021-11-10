@@ -51,7 +51,6 @@ params.max_steps = 2
 params.umi_edit_dist = 1
 params.cdr3_edit_dist = 1
 params.max_cdr3_len = 100
-params.swifr = "/sc1/groups/pls-redbfx/immunoPETE/swifr/bin/swifr2"
 params.fastq1 = "../../../data/PBMC_1000ng_25ul_2_S6_R1_001.fastq.gz"
 params.fastq2 = "../../../data/PBMC_1000ng_25ul_2_S6_R2_001.fastq.gz"
 params.sample = "PBMC_1000ng_25ul_2_S6"

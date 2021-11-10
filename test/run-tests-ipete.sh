@@ -1,6 +1,3 @@
-module load nextflow_latest/19.07.0
-module load bats
-
 parent=$(dirname $PWD)
 export NXF_CLASSPATH=${parent}/nextflow/lib/
 
