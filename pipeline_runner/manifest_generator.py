@@ -23,9 +23,9 @@ def getRunData(run_folder):
     elif len(sequencing_date) == 8:
         sequencing_date = datetime.strptime(sequencing_date, '%Y%m%d').date()
     else:
-        self.logger.warning(
-            'Unrecognized sequencing date format: {}. Record raw string instead.'.format(self.sequencing_date)
-        )
+        #logger.warning(
+        print('Unrecognized sequencing date format: {}. Record raw string instead.'.format(sequencing_date))
+        #)
     runData = collections.OrderedDict({
         "run_id" : run.attrib['Id'],
         "run_number" : int(run.attrib['Number']),
@@ -41,8 +41,10 @@ def create_manifest(sample_sheet_path, manifest_out, exptParams):
     Take a sample sheet and generate a manifest with default config values for immunoPETE
     
     """
+
+    sample_sheet_path = os.path.realpath(sample_sheet_path)
     sample_sheet = SampleSheet(sample_sheet_path)
-    
+
     experiment_name = sample_sheet.header.experiment_name
     instrument_type = sample_sheet.header.instrument_type
 

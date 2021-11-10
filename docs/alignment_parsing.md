@@ -1,4 +1,4 @@
-## Alignment Parsing
+## V-D_J recombinant detection
 After V and J gene alignment, read alignments are parsed along with the reference annotation to find the CDR3 sequence.
 
 CDR3 boundary elements are annotated in the ImmunoDB reference: http://ghe-rss.roche.com/plsRED-Bioinformatics/immunoDB

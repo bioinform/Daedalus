@@ -34,10 +34,14 @@ class RunInfo:
         self.flowcell_id = run.find('Flowcell').text
         self.instrument = run.find('Instrument').text
         self.sequencing_date = run.find('Date').text
+        if len(self.sequencing_date) > 10:
+            self.sequencing_date = self.sequencing_date.split(' ')[0]
         if len(self.sequencing_date) == 6:
             self.sequencing_date = datetime.strptime(self.sequencing_date, '%y%m%d').date()
         elif len(self.sequencing_date) == 8:
             self.sequencing_date = datetime.strptime(self.sequencing_date, '%Y%m%d').date()
+        elif len(self.sequencing_date) == 9:
+            self.sequencing_date = datetime.strptime(self.sequencing_date, '%m/%d/%Y').date()
         else:
             self.logger.warning(
                 'Unrecognized sequencing date format: {}. Record raw string instead.'.format(self.sequencing_date)

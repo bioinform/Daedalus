@@ -14,7 +14,7 @@ runpipeline() {
 
     nextflow run $BATS_TEST_DIRNAME/../nextflow/segment3-ipete.nf \
         -ansi-log false \
-	    -profile ipete \
+	    -profile ipete_docker \
 	    -with-dag ipete.png \
 	    -c config.txt \
 	    > nextflow.log 2>&1 

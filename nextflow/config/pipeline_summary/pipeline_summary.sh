@@ -1,10 +1,10 @@
-#!/bin/bash
-source activate Daedalus_env
+#!/bin/bash -e
 
-##pipeline-summary -p ${analysis_dir}
+# Load conda env within Docker
+source /root/.bashrc || echo "Failed to source /root/.bashrc" >&2
 
-pipelineSummary=/sc1/groups/pls-redbfx/immunoPETE/develop/Daedalus/pipeline_runner/pipeline_summary.py
+##pipelineSummary=/sc1/groups/pls-redbfx/immunoPETE/develop/Daedalus/pipeline_runner/pipeline_summary.py
 
-python \$pipelineSummary -p ${analysis_dir}
+python ${params.pipeline_summary} -p ${analysis_dir}
 
 

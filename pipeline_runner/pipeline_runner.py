@@ -9,11 +9,9 @@ import re
 import collections
 import time
 
-from html_generator import HtmlGenerator
 from manifest_parser import ManifestParser
 from manifest_parser import NextflowConfig
-from reference_generator import ReferenceGenerator
-
+from default_params import *
 
 def wait_for_memory(mem_required_gb=12):
     """Wait for enough memory to run the function.
@@ -52,16 +50,18 @@ class PipelineRunner:
     pipeline_reporter_path : str
         Path to the pipeline_summary.py.
     group : str
-        Group to submit jobs on the cluster.
+        Group to submit jobs on SC1.
     genes : set
         Genes to detect: {'TRA', 'TRB', 'TRD', 'TRG', 'IGH', 'IGL', 'IGK'}.
     idb_type : set
         IDB type to detect: {'gene', 'pseudogene', 'pseudo-CDR3'}. Set to None will include all.
     local : bool
         If true, run the pipeline in local machine.
+    no_fairshare : bool
+        If true, submit jobs without Fair Share policy.
     """
 
-    def __init__(self, group, genes, idb_type=None, local=False):
+    def __init__(self, group, genes, idb_type=None, local=False, no_fairshare=False):
         self.repo_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
         self.segment1_path = os.path.join(self.repo_path,
                                           'nextflow',
@@ -76,6 +76,7 @@ class PipelineRunner:
         self.genes = genes
         self.idb_type = idb_type
         self.local = local
+        self.no_fairshare = no_fairshare
         self.logger = logging.getLogger(__name__)
 
     def match_files(self, path, pattern):
@@ -100,17 +101,21 @@ class PipelineRunner:
         
     def build_seg2_configs(self, seg1Output, sample_info):
         configs = collections.OrderedDict()
-        for sample in sample_info["sample_name"]:
-            configs[sample] = NextflowConfig()
+        for sample in sample_info["sample_name"]:            
             R1files = self.match_files(seg1Output, "{}_S[0-9]+_R1_001.fastq.gz".format(sample))
             R2files = self.match_files(seg1Output, "{}_S[0-9]+_R2_001.fastq.gz".format(sample))            
             sampleParams = sample_info.loc[sample_info["sample_name"] == sample]            
             sampleParams = sampleParams.reset_index()
-            sampleParams["fastq1"] = R1files[0]
-            sampleParams["fastq2"] = R2files[0]
-            sampleParams["sample"] = sample
-            for column in sampleParams.columns:
-                configs[sample][column] = sampleParams[column][0]
+            if len(R1files) == 1 and len(R2files) == 1:                
+                sampleParams["fastq1"] = R1files[0]
+                sampleParams["fastq2"] = R2files[0]
+                sampleParams["sample"] = sample
+                configs[sample] = NextflowConfig()
+                for column in sampleParams.columns:
+                    configs[sample][column] = sampleParams[column][0]
+            else:
+                continue
+                    
         return configs
             
     def run(self, fname, out_dir, resume, prefix=None, wait=False):
@@ -134,6 +139,7 @@ class PipelineRunner:
         -------
         None
         """
+        out_dir = os.path.realpath(out_dir)
         fname = os.path.abspath(os.path.expanduser(fname))
         mp = ManifestParser(fname, out_dir, prefix)
         
@@ -164,6 +170,7 @@ class PipelineRunner:
                         self.logger.info(
                             'Folder {} exists, resuming the pipeline.'.format(work_dir))
                     shutil.copyfile(fname, manifest_path)
+                    config['pipeline_summary'] = getDefaultParams()["pipeline_summary"]
                     config.write(config_path)
                     sample_info.to_csv(sample_info_path, index=False)
                     # Generate reference in the work directory
@@ -187,8 +194,12 @@ class PipelineRunner:
                         sampleConfig = seg2Configs[sample]
                         sampleConfig['finalDir'] = config['finalDir']
                         sampleConfig.write(sample_config_path)
-                        proc = self._submit_segment2(seg2_work_dir, sampleConfig, sample_config_path,
+                        if self.local:
+                            proc = self._run_segment2(seg2_work_dir, sampleConfig, sample_config_path,
                                            sample_info_path, os.path.join(nextflow_log_path, 'seg2_{}.log'.format(sample)))
+                        else:
+                            proc = self._submit_segment2(seg2_work_dir, sampleConfig, sample_config_path,
+                                            sample_info_path, os.path.join(nextflow_log_path, 'seg2_{}.log'.format(sample)))
                         seg2_procs[sample] = proc
                         time.sleep(5)
                 
@@ -199,7 +210,7 @@ class PipelineRunner:
                         seg2_log[sample] = status
                         self.logger.info('Finished {sample}: {status}'.format(sample=sample, status=status))
 
-                    ##lets just chill out and wait for files to complete transfering from seg2
+                    ##wait for files to complete transfering from seg2
                     time.sleep(10)
                     self._run_segment3(seg3_work_dir, config, config_path,
                                        os.path.join(nextflow_log_path, 'seg3.log'))
@@ -232,7 +243,7 @@ class PipelineRunner:
         """
         os.chdir(work_dir)
 
-        profile = 'ipete' if not self.local else 'local'
+        profile = 'ipete_docker' if not self.local else 'local'
 
         command = '''
         export NXF_OPTS="-Xmx512M";
@@ -247,7 +258,7 @@ class PipelineRunner:
 
     def _submit_segment2(self, work_dir, config, config_path, sample_info_path, nextflow_log_path):
         os.chdir(work_dir)
-        profile = 'ipete' if not self.local else 'local'
+        profile = 'ipete_docker' if not self.local else 'local'
 
         script = '''
         export NXF_OPTS="-Xmx512M";
@@ -259,7 +270,10 @@ class PipelineRunner:
         with open('run_workflow.sh', 'w') as f:
             f.write(script)
             f.flush()
-        command = f'qsub -V -S /bin/bash -cwd -l h_vmem=12G -N nf-submit -P {self.group} -sync y run_workflow.sh'
+        if self.no_fairshare:
+            command = f'qsub -V -S /bin/bash -cwd -l h_vmem=12G -N nf-submit -sync y run_workflow.sh'
+        else:
+            command = f'qsub -V -S /bin/bash -cwd -l h_vmem=12G -N nf-submit -P {self.group} -sync y run_workflow.sh'
 
         self.logger.info('Submitting Segment2.')
         proc = subprocess.Popen(command, shell=True)
@@ -290,7 +304,7 @@ class PipelineRunner:
         """
         os.chdir(work_dir)
 
-        profile = 'ipete' if not self.local else 'local'
+        profile = 'ipete_docker' if not self.local else 'local'
 
         command = '''
         export NXF_OPTS="-Xmx512M";
@@ -326,7 +340,7 @@ class PipelineRunner:
         """
         os.chdir(work_dir)
 
-        profile = 'ipete' if not self.local else 'local'
+        profile = 'ipete_docker' if not self.local else 'local'
 
         command = '''
         export NXF_OPTS="-Xmx512M";
@@ -337,7 +351,9 @@ class PipelineRunner:
                    log=nextflow_log_path)
 
         self.logger.info('Submitting Segment3.')
-        subprocess.run(command, shell=True)
+        ##subprocess.run(command, shell=True)
+        proc = subprocess.Popen(command, shell=True)
+        proc.wait()
         self.logger.info('Pipeline is submitted. Check the status at {}'.format(nextflow_log_path))
 
     def get_version(self):
@@ -379,16 +395,18 @@ def parse_args():
     parser.add_argument('-r', '--resume', action='store_true',
                         help='When Nextflow work directory exists, resume the pipeline.')
     parser.add_argument('-g', '--group', default='rssprbf',
-                        help='Group to submit jobs on cluster.')
+                        help='Group to submit jobs on SC1.')
     parser.add_argument('--gene_type', type=str, default='ALL',
                         help='Gene type to detect: IG, TR, ALL. Default is ALL.')
     parser.add_argument('--idb_type', type=str,
                         help='IDB type to include: gene, noCDR3. Use comma to separate multiple types. Default will include all.')
     parser.add_argument('--local', action='store_true',
                         help='Run pipeline locally.')
+    parser.add_argument('--no_fairshare', action='store_true',
+                        help='Submit jobs without Fair Share policy.')
     parser.add_argument('--wait', action='store_true',
                         help='Wait for the pipeline to finish. Without this option, nextflow will run in background.')
-    parser.add_argument('-o', '--out_dir', default='./daedalus_results',
+    parser.add_argument('-o', '--out_dir', default='/sc1/groups/pls-redbfx/pipeline_runs/iPETE',
                         help='Nextflow output directory.')
     parser.add_argument('--prefix',
                         help='Prefix project name with specified prefix. If None, the current date will be used.')
@@ -430,7 +448,8 @@ def main(args):
         group=args.group,
         genes=args.genes,
         idb_type=args.idb_type,
-        local=args.local)
+        local=args.local,
+        no_fairshare=args.no_fairshare)
     pr.run(args.manifest, args.out_dir, args.resume, args.prefix, args.wait)
 
 

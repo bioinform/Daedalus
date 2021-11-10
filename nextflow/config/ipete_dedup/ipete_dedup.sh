@@ -1,5 +1,7 @@
-#!/bin/bash
-source activate Daedalus_env
+#!/bin/bash -e
+
+# Load conda env within Docker
+source /root/.bashrc || echo "Failed to source /root/.bashrc" >&2
 
 ##run dedup with variable number of UMIs 
 if [ "${umi_mode}" ==  "none" ]

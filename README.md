@@ -3,53 +3,88 @@
 Nextflow pipeline for analysis of libraries prepared using the ImmunoPETE assay.
 
 - [Daedalus](#daedalus)
-    - [Download](#download)
-    - [Build Conda Environment](#build-conda-environment)
-    - [Test Pipeline](#test-pipeline)
-    - [Run Pipeline](#run-pipeline)
-        - [Load Environment](#load-the-environment)
-        - [Generate Manifest from Sample Sheet](#generate-manifest-from-sample-sheet)
-        - [Submit Pipeline Run](#submit-pipeline-run)
-        - [Output](#output)
-    - [Workflow](#workflow)
-    - [Methods](#methods)
+  - [Install and Configure](#install-and-configure)
+    - [Software Requirements](#software-requirements)
+    - [Download git repo](#download-git-repo)
+    - [Build Conda Environment (Optional)](#build-conda-environment-optional)
+    - [Install](#install)
+    - [Build Docker images](#build-docker-images)
+    - [Configure images](#configure-images)
+    - [Configure the pipeline](#configure-the-pipeline)
+    - [Test Pipeline on a single sample](#test-pipeline-on-a-single-sample)
+  - [Running Pipeline](#running-pipeline)
+    - [Generate Manifest from Sample Sheet](#generate-manifest-from-sample-sheet)
+    - [Submit Pipeline Run](#submit-pipeline-run)
+    - [Output](#output)
+  - [Workflow](#workflow)
+  - [Methods](#methods)
+
+## Install and Configure
 
 Note... The Nextflow Config file must be configured for the queue.
 
-## Software Requirements 
-- built on a linux server: CentOS Linux release 7.7.1908 (Core)
-- miniconda3, for package management
-- nextflow 19.07.0, to run the pipeline 
-- uge, for cluster job submission
+### Software Requirements
 
-## Download git rep
+- Python 3.6
+- Java 8
+- Nextflow 19.07.0, to run the pipeline
+- UGE, for cluster job submission
+
+### Download git repo
+
 ```bash
 git clone git@github.com:bioinform/Daedalus.git
 cd Daedalus
+git checkout tags/${release-version}
 ```
 
-## Install SWIFR aligner
-A smith waterman alignment implemention (c++) was developed and is used to identfy primers and V/J gene segements from fastq formatted reads. Please read the full README for swifr in the packages folder `./packages/swifr/` for instructions how to install.
+### Build Conda Environment (Optional)
 
-## Build Conda Environment
-
-Build the conda environment for running the pipeline:
-```bash
-conda env create -f environment.yml
-```
-
-##install python packages in the loaded conda ENV
+It's recommended to create a conda environment:
 
 ```bash
-conda activate Daedalus_env
-./install_packages.sh
+conda create -n Daedalus python=3.6
+conda activate Daedalus
 ```
 
-## Nextflow configuration
-Nextflow must be configured for each system. The ipete profile in the nextflow config file `./nextflow/nextflow.config` should be updated accordingly.
+### Install
 
+Within Daedalus directory, execute the following command.
 
-## Test Pipeline on a single sample
+```bash
+pip install .
+```
+
+### Build Docker images
+
+Due to license restriction, you will have to build the Bcl2fastq image using the Docker file.
+Please refer to [Dockerhub](https://docs.docker.com/docker-hub/) for creating repo and pushing images.
+
+```bash
+docker build -t {dockerhub_username}/bcl2fastq:{version} -f Dockerfile_bcl2fastq .
+docker push {dockerhub_username}/bcl2fastq:{version}
+```
+
+### Configure images
+
+After building your own images, set the following params in the `nextflow/defaults-ipete.config` with your own images.
+
+```javascript
+params.bcl2fastq_docker = "{dockerhub_username}/bcl2fastq:{version}"
+```
+
+### Configure the pipeline
+
+The pipeline runs on UGE cluster by default. If you install it on a different machine, modify the cluster settings in the `nextflow/nextflow.config` accordingly.
+
+```javascript
+ipete_docker {
+    process.clusterOptions = { "-l h_vmem=${task.ext.vmem} -S /bin/bash -l docker_version=new -V" }
+}
+docker.runOptions = "-u=\$UID --rm -v /path/to/input_and_output:/path/to/input_and_output"
+```
+
+### Test Pipeline on a single sample
 Once all the software has been installed and nextflow has been configured the pipeline bats test can be run. The bats test runs the pipeline on a single sample, from the paired fastq files provided:
 - PBMC_1000ng_25ul_2_S6_R1_001.fastq.gz
 - PBMC_1000ng_25ul_2_S6_R2_001.fastq.gz
@@ -57,24 +92,17 @@ Once all the software has been installed and nextflow has been configured the pi
 In order the run the test, download both files from dropbox and move them into the data folder `Daedalus/data`. Once the data is available, run the test using the following commands:
 
 ```bash
-conda activate Daedalus_env
 cd test
 bats single-sample-ipete.bats
 ```
 
 An example of the pipeline output has also been provided: `PBMC_1000ng_25ul_2.tar.gz`
 
-
 ## Running Pipeline
+
 Running the pipeline requires a complete flowcell worth of immunoPETE libraries.
 
-### Load the Environment
-
-```bash
-conda activate Daedalus_env
-```
-
-### Generate Manifest for ImmunoPETE Run from the Sample Sheet
+### Generate Manifest from Sample Sheet
 
 ```bash
 manifestGenerator = /path/to/Daedalus/pipeline_runner/manifest_generator.py
@@ -84,32 +112,30 @@ sampleSheet = /path/to/sampleSheet.csv
 python ${manifestGenerator} \
        --pipeline_run_id Daedalus_example_run \
        --sequencing_run_folder ${illuminaDir} \
-       --sequencing_platform NextSeq \
        --output Daedalus_example_manifest.csv \
        --subsample 1 \
        --umi_mode True \
        --umi2 'NNNNNNNNN' \
        --umi_type R2 \
-	   ${sampleSheet}
-
+       ${sampleSheet}
 ```
 
 The manifest file contains all parameters needed for the pipeline to run. Sample specific tuning of parameters or any updates to the parameters can be acheived by editing the manifest file generated. After edits are complete, the pipeline can be submitted using the manifest file alone.
 
-### Submit the Pipeline Run on the cluster
+### Submit Pipeline Run
 
-Using the output from Manifest Generator `Daedalus_example_manifest.csv` pipeline runs are submitted using the script: pipeline_runner.py. 
+Using the output from Manifest Generator `Daedalus_example_manifest.csv` pipeline runs can be submitted using the script: pipeline_runner.py.
 
 ```bash
 pipelineRunner=/path/to/Daedalus/pipeline_runner/pipeline_runner.py
 outDir=/path/to/analysis/output
 
-python ${pipelineRunner} -g rssprbf --wait --resume -o ${outDir} Daedalus_example_manifest.csv
-``````
+python ${pipelineRunner} -g rssprbfprj --wait --resume -o ${outDir} Daedalus_example_manifest.csv
+```
 
 A `-g $group` needs to be provided to submit jobs to SGE cluster on SC1. 
 
-### Pipeline Output
+### Output
 
 At the specified output directory `${outDir}`, the analysis folder will be written using the `pipeline_run_id` "Daedalus_example_run"  
 
@@ -117,15 +143,9 @@ At the specified output directory `${outDir}`, the analysis folder will be writt
 ${outDir}/Daedalus_example_run
 ```
 
-## Nextflow Workflow DAG
+## Workflow
 
 ![workflow](docs/img/flowchart.png)
 
 ## Methods
 Overview of the [Pipeline Methods](docs/Daedalus_methods.md) for key processing steps.
-
-
-
-
-
-
