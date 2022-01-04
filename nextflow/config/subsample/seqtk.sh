@@ -1,7 +1,9 @@
-#!/bin/bash
-# Default params.subsample should be set to 1 so seqtk won't do subsampling.
-source activate Daedalus_env
+#!/bin/bash -e
 
+# Load conda env within Docker
+source /root/.bashrc || echo "Failed to source /root/.bashrc" >&2
+
+# Default params.subsample should be set to 1 so seqtk won't do subsampling.
 if [ ${params.subsample} == 1 ] 
 then
     gunzip -c $read1 > read1.fastq

@@ -113,8 +113,9 @@ class PipelineLogger:
                 if re.search("Execution status: failed", line):
                     return("fail")
                 elif re.search("Execution status: OK", line):
-                    return("pass")                
-    
+                    return("pass")
+            return("fail")
+        
     def get_analysis_info(self):
         """
         Summary of Pipeline/Analysis status

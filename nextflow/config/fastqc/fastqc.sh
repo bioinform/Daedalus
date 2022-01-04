@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/bin/bash -e
+
+# Load conda env within Docker
+source /root/.bashrc || echo "Failed to source /root/.bashrc" >&2
 
     ${FASTQC_PATH}/fastqc ${read1} ${read2}
     unzip ${read1.name.replaceFirst(/.fastq$/, '_fastqc.zip')}

@@ -1,5 +1,7 @@
-#!/bin/bash
-source activate Daedalus_env
+#!/bin/bash -e
+
+# Load conda env within Docker
+source /root/.bashrc || echo "Failed to source /root/.bashrc" >&2
 
 flash ${read1} ${read2} -O -o ${sample} -M 250
 ##and uncombined read1

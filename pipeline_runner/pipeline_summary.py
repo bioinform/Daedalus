@@ -125,9 +125,9 @@ def pipeline_summary(analysisDir, outFile):
                 "simpsons_diversity_index" : None,
                 "simpsons_dominance_index" : None,
             })
-            stats.update(trbStats)
-            stats.update(ighStats)
-            stats.update(trdStats)
+            ##stats.update(trbStats)
+            ##stats.update(ighStats)
+            ##stats.update(trdStats)
             reportFiles = collections.OrderedDict({
                 "cdr3_report" : None,
                 "diversity_report" : None,
@@ -224,7 +224,7 @@ def pipeline_summary(analysisDir, outFile):
             simpsonsDiv =  "{:.6f}".format(simpsons_diversity_index(CDR3clones.values()))
             simpsonsDom = "{:.6f}".format(simpsons_dominance_index(CDR3clones.values()))
         if cellCount < 10:
-            status = "fail: <10 clones"
+            status = "fail: <10 cells"
         stats = collections.OrderedDict({
             "experiment_name" : sampleData["experiment_name"][0],
             "sample_name" : sample_name,

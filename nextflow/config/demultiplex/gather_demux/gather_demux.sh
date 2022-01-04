@@ -1,3 +1,4 @@
 #!/bin/bash -e
-conda activate VDJdetect
 
+# Load conda env within Docker
+source /root/.bashrc || echo "Failed to source /root/.bashrc" >&2

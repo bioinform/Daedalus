@@ -1,5 +1,8 @@
 #!/bin/bash -e
-source activate Daedalus_env
+
+# Load conda env within Docker
+source /root/.bashrc || echo "Failed to source /root/.bashrc" >&2
+
 bcl2fastq \
     --no-lane-splitting \
     -r ${task.cpus} \
